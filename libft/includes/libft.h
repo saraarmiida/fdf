@@ -6,7 +6,7 @@
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 13:12:21 by spentti           #+#    #+#             */
-/*   Updated: 2019/11/13 14:20:23 by spentti          ###   ########.fr       */
+/*   Updated: 2019/11/27 11:35:25 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,7 @@ char				*ft_strndup(const char *str, size_t n);
 char				*ft_strnjoin(char const *s1, char const *s2, size_t n);
 char				*ft_strcjoin(char const *s1, char const *s2, char const c);
 char				*ft_strccpy(char *dst, const char *src, const char c);
+
+int					ft_getnbr(const char *str);
 
 #endif
