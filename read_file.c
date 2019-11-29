@@ -6,7 +6,7 @@
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 11:06:07 by spentti           #+#    #+#             */
-/*   Updated: 2019/11/29 13:27:57 by spentti          ###   ########.fr       */
+/*   Updated: 2019/11/29 14:42:46 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int		main(int argc, char **argv)
 	int **i_map;
 	int x;
 	t_dot *head;
+	t_dot *temp;
 
 	if (argc != 2)
 	{
@@ -128,10 +129,12 @@ int		main(int argc, char **argv)
 	close (fd);
 	i_map = char_to_int(map, line_nb);
 	head = save_coords(i_map);
-	// while (head)
+	// printf("before rot:\n");
+	// temp = head;
+	// while (temp)
 	// {
-	// 	printf("y: %d x: %d z: %d\n", head->y, head->x, head->z);
-	// 	head = head->next;
+	// 	printf("y: %d x: %d z: %d\n", temp->y, temp->x, temp->z);
+	// 	temp = temp->next;
 	// }
 	// y = 0;
 	// while (i_map[y] != NULL)
@@ -147,10 +150,18 @@ int		main(int argc, char **argv)
 	// 	y++;
 	// }
 	rotate_z(head);
+	//ft_putendl("WTF");
+	printf("\n\nafter rot:\n");
+	temp = head;
+	while (temp)
+	{
+		printf("y: %d x: %d z: %d\n", temp->y, temp->x, temp->z);
+		temp = temp->next;
+	}
 	// rotate_z(head);
-	param[0] = mlx_init();
-	param[1] = mlx_new_window(param[0], 1000, 1000, "mlx_42");
-	draw_map(head, line_nb, param);
-	mlx_loop(param[0]);
+	// param[0] = mlx_init();
+	// param[1] = mlx_new_window(param[0], 1000, 1000, "mlx_42");
+	// draw_map(head, line_nb, param);
+	// mlx_loop(param[0]);
 	return (0);
 }
