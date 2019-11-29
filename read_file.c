@@ -6,95 +6,103 @@
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 11:06:07 by spentti           #+#    #+#             */
-/*   Updated: 2019/11/27 18:06:26 by spentti          ###   ########.fr       */
+/*   Updated: 2019/11/29 13:27:57 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	get_coord(char **map, void **param)
+t_dot	*save_coords(int **map)
 {
+	t_dot *dot;
+	t_dot *head;
 	int x;
 	int y;
-	int y1;
-	int y2;
-	int x1;
-	int x2;
-	int xo;
-	int xt;
 
 	y = 0;
-	x = 0;
-	xo = 400;
-	// while (map[y] != '\0')
-	// {
-	// 	x = 0;
-	// 	while (map[y][x] != '\0')
-	// 	{
-	// 		while (map[y][x] == ' ')
-	// 			x++;
-	// 		y1 = (y - ft_atoi(&map[y][x])) * 50 + 500;
-	// 		mlx_pixel_put(param[0], param[1], x * 50 + xo, y1, 0xFFFFFF);
-	// 		x++;
-	// 	}
-	// 	xo = xo - 100;
-	// 	y++;
-	// }
-	y = 0;
-	xo = 400;
-	while (map[y] != '\0')
+	head = NULL;
+	while (map[y])
 	{
 		x = 0;
-		while (map[y][x] != '\0')
+		while (map[y][x] != -1)
 		{
-			if (map[y][x + 1] != '\0')
+			if (head == NULL)
 			{
-				while (map[y][x] == ' ')
-					x++;
-				y1 = (y - ft_atoi(&map[y][x])) * 50 + 100;
-				xt = x + 1;
-				while (map[y][xt] == ' ')
-					xt++;
-				y2 = (y - ft_atoi(&map[y][xt])) * 50 + 100;
-				x1 = x * 50 + xo;
-				x2 = xt * 50 + xo;
-				draw_line(x1, y1, x2, y2, param);
+				if (!(head = (t_dot *)malloc(sizeof(t_dot))))
+					return (NULL);
+				head->y = y;
+				head->x = x;
+				head->z = map[y][x];
+				dot = head;
 			}
-			if (map[y + 1] != '\0')
+			else
 			{
-				x1 = x * 50 + xo;
-				y1 = (y - ft_atoi(&map[y][x])) * 50 + 100;
-				y2 = ((y + 1) - ft_atoi(&map[y + 1][x])) * 50 + 100;
-				x2 = x * 50 + xo - 100;
-				draw_line(x1, y1, x2, y2, param);
+				if (!(dot->next = (t_dot *)malloc(sizeof(t_dot))))
+					return (NULL);
+				dot = dot->next;
+				dot->y = y;
+				dot->x = x;
+				dot->z = map[y][x];	
 			}
 			x++;
-			while (map[y][x] == ' ')
-				x++;
 		}
-		xo = xo - 100;
 		y++;
 	}
-	return (0);
+	return (head);
 }
 
-int	main(int argc, char **argv)
+int	**char_to_int(char **c_map, int line_nb)
+{
+	int **i_map;
+	int y;
+	int xc;
+	int xi;
+
+	if (!(i_map = (int **)malloc(sizeof(int *) * line_nb + 1)))
+		return (NULL) ;
+	y = 0;
+	while (c_map[y] != '\0')
+	{
+		if (!(i_map[y] = (int *)malloc(sizeof(int) * ft_strlen(c_map[y]) + 1)))
+			return (NULL);
+		xi = 0;
+		xc = 0;
+		while (c_map[y][xc] != '\0')
+		{
+			while (c_map[y][xc] == ' ')
+				xc++;
+			i_map[y][xi] = ft_atoi(&c_map[y][xc]);
+			xi++;
+			xc++;
+			while (c_map[y][xc] == ' ')
+				xc++;
+		}
+		i_map[y][xi] = -1;
+		y++;
+	}
+	i_map[y] = NULL;
+	return (i_map);
+}
+
+int		main(int argc, char **argv)
 {
 	int		fd;
 	char	*line;
 	int		line_nb;
-	//t_list	*dot;
+	int		line_len;
 	char	**map;
-	size_t	line_len;
 	int		y;
-	int		x;
 	void *param[2];
+	int **i_map;
+	int x;
+	t_dot *head;
 
 	if (argc != 2)
 	{
 		ft_putendl("Parameters not valid.");
 		return (1);
 	}
+	
 	line_nb = 0;
 	fd = open(argv[1], O_RDONLY);
 	while (get_next_line(fd, &line) > 0)
@@ -110,16 +118,39 @@ int	main(int argc, char **argv)
 	while (get_next_line(fd, &line) > 0)
 	{
 		map[y] = ft_strdup(line);
-		printf("line: %s\n", line);
-		printf("map[%d]: %s\n", y, map[y]);
+		// printf("line: %s\n", line);
+		// printf("map[%d]: %s\n", y, map[y]);
 		y++;
 		ft_strdel(&line);
 	}
+	
 	map[y] = NULL;
 	close (fd);
+	i_map = char_to_int(map, line_nb);
+	head = save_coords(i_map);
+	// while (head)
+	// {
+	// 	printf("y: %d x: %d z: %d\n", head->y, head->x, head->z);
+	// 	head = head->next;
+	// }
+	// y = 0;
+	// while (i_map[y] != NULL)
+	// {
+		
+	// 	x = 0;
+	// 	while (i_map[y][x] != -1)
+	// 	{
+	// 		printf("%d ", i_map[y][x]);
+	// 		x++;
+	// 	}
+	// 	printf("\n");
+	// 	y++;
+	// }
+	rotate_z(head);
+	// rotate_z(head);
 	param[0] = mlx_init();
 	param[1] = mlx_new_window(param[0], 1000, 1000, "mlx_42");
-	get_coord(map, param);
+	draw_map(head, line_nb, param);
 	mlx_loop(param[0]);
 	return (0);
 }
