@@ -60,3 +60,154 @@
 // 	}
 // 	return (0);
 // }
+
+
+// int main()
+// {
+// 	void *param[2];
+// 	int x;
+// 	int y;
+
+// 	param[0] = mlx_init();
+// 	param[1] = mlx_new_window(param[0], 1000, 1000, "mlx_42");
+// 	x = 200;
+// 	y = 200;
+// 	while (x < 400)
+// 	{
+// 		draw_line(x, y, 500, 500, param);
+// 		x += 10;
+// 		y += 5;
+// 	}
+// 	while (x < 500)
+// 	{
+// 		draw_line(x, y, 500, 500, param);
+// 		x += 5;
+// 		y -= 12;
+// 	}
+// 	while (x < 600)
+// 	{
+// 		draw_line(x, y, 500, 500, param);
+// 		x += 5;
+// 		y += 12;
+// 	}
+// 	while (x < 800)
+// 	{
+// 		draw_line(x, y, 500, 500, param);
+// 		x += 10;
+// 		y -= 5;
+// 	}
+// 	y = 200;
+// 	x = 200;
+// 	while (y < 400)
+// 	{
+// 		draw_line(x, y, 500, 500, param);
+// 		y += 10;
+// 		x += 5;
+// 	}
+// 	while (y < 500)
+// 	{
+// 		draw_line(x, y, 500, 500, param);
+// 		y += 5;
+// 		x -= 12;
+// 	}
+// 	while (y < 600)
+// 	{
+// 		draw_line(x, y, 500, 500, param);
+// 		y += 5;
+// 		x += 12;
+// 	}
+// 	while (y < 800)
+// 	{
+// 		draw_line(x, y, 500, 500, param);
+// 		y += 10;
+// 		x -= 5;
+// 	}
+// 	x = 200;
+// 	y = 800;
+// 	while (x < 400)
+// 	{
+// 		draw_line(x, y, 500, 500, param);
+// 		x += 10;
+// 		y -= 5;
+// 	}
+// 	while (x < 500)
+// 	{
+// 		draw_line(x, y, 500, 500, param);
+// 		x += 5;
+// 		y += 12;
+// 	}
+// 	while (x < 600)
+// 	{
+// 		draw_line(x, y, 500, 500, param);
+// 		x += 5;
+// 		y -= 12;
+// 	}
+// 	while (x < 800)
+// 	{
+// 		draw_line(x, y, 500, 500, param);
+// 		x += 10;
+// 		y += 5;
+// 	}
+// 	y = 200;
+// 	x = 800;
+// 	while (y < 400)
+// 	{
+// 		draw_line(500, 500, x, y, param);
+// 		y += 10;
+// 		x -= 5;
+// 	}
+// 	while (y < 500)
+// 	{
+// 		draw_line(x, y, 500, 500, param);
+// 		y += 5;
+// 		x += 12;
+// 	}
+// 	while (y < 600)
+// 	{
+// 		draw_line(x, y, 500, 500, param);
+// 		y += 5;
+// 		x -= 12;
+// 	}
+// 	while (y <= 800)
+// 	{
+// 		draw_line(500, 500, x, y, param);
+// 		y += 10;
+// 		x += 5;
+// 	}
+	
+// 	mlx_loop(param[0]);
+// 	return (0);
+// }
+
+// int main()
+// {
+// 	void *param[2];
+// 	int x;
+// 	int y;
+
+// 	param[0] = mlx_init();
+// 	param[1] = mlx_new_window(param[0], 1000, 1000, "mlx_42");
+// 	draw_line(200, 400, 500, 100, param);
+// 	draw_line(500, 100, 800, 300, param);
+// 	draw_line(500, 100, 700, 400, param);
+// 	draw_line(300, 300, 800, 300, param);
+// 	draw_line(200, 400, 700, 400, param);
+// 	draw_line(700, 400, 800, 300, param);
+// 	//draw_line(100, 400, 500, 400, param);
+// 	//draw_line(500, 300, 500, 400, param);
+// 	mlx_string_put(param[0], param[1], 500, 100, 0xFF0000, "hello");
+// 	mlx_string_put(param[0], param[1], 200, 400, 0x810202, "*");
+// 	mlx_string_put(param[0], param[1], 300, 300, 0x830707, "*");
+// 	mlx_string_put(param[0], param[1], 700, 400, 0xFf, "*");
+// 	mlx_string_put(param[0], param[1], 800, 300, 0x0000FF, "*");
+
+// 	mlx_loop(param[0]);
+// 	return (0);
+// }
+
+xy->x1 = ((dot->x - dot->y) * cos(0.523599)) * 50 + 100;
+	xy->y1 = (-(dot->z) + (dot->x + dot->y) * sin(0.523599)) * 50 + 100;
+	xy->x2 = ((dot->x - dot->y) * cos(0.523599) + mode_x) * 50 + 100;
+	xy->y2 = ((-(dot->z) + (dot->x + dot->y) * sin(0.523599)) + mode_y) * 50 + 100;
+	xy->dx = xy->x2 - xy->x1;
+	xy->dy = xy->y2 - xy->y1;

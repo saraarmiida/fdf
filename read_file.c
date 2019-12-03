@@ -6,162 +6,153 @@
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 11:06:07 by spentti           #+#    #+#             */
-/*   Updated: 2019/11/29 14:42:46 by spentti          ###   ########.fr       */
+/*   Updated: 2019/12/03 19:40:02 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_dot	*save_coords(int **map)
+int		save_xy(t_dot *dot, int x, int y, char *z)
 {
-	t_dot *dot;
-	t_dot *head;
-	int x;
-	int y;
+	if (!(dot = (t_dot *)malloc(sizeof(t_dot))))
+		return (1);
+	dot->z = ft_atoi(z);
+	dot->y = y;
+	dot->x = x;
+	dot->next = NULL;
+	return (0);
+}
+
+int		make_list(t_dot *head, t_dot *dot, int *x, int *y, char *z)
+{
+	if (head == NULL)
+	{
+		if (!(head = (t_dot *)malloc(sizeof(t_dot))))
+			return (1);
+		head->z = ft_atoi(z);
+		head->y = *y;
+		head->x = *x;
+		dot = head;
+		dot->next = NULL;
+	}
+	else
+	{
+		if (!(dot->next = (t_dot *)malloc(sizeof(t_dot))))
+			return (1);
+		dot = dot->next;
+		dot->y = *y;
+		dot->x = *x;
+		dot->z = ft_atoi(z);
+		dot->next = NULL;
+	}
+	return (0);
+}
+
+t_dot	*save_coords(char **map, t_dot *head)
+{
+	t_dot	*dot;
+	int		fake_x;
+	int		x;
+	int		y;
 
 	y = 0;
-	head = NULL;
 	while (map[y])
 	{
 		x = 0;
-		while (map[y][x] != -1)
+		fake_x = 0;
+		while (map[y][fake_x])
 		{
-			if (head == NULL)
+			if (map[y][fake_x] >= '0' && map[y][fake_x] <= '9')
 			{
-				if (!(head = (t_dot *)malloc(sizeof(t_dot))))
-					return (NULL);
-				head->y = y;
-				head->x = x;
-				head->z = map[y][x];
-				dot = head;
+				if (head == NULL)
+				{
+					if (!(head = (t_dot *)malloc(sizeof(t_dot))))
+						return (NULL);
+					head->z = ft_atoi(&map[y][fake_x]);
+					head->y = y;
+					head->x = x;
+					dot = head;
+					dot->next = NULL;
+					x++;
+				}
+				else
+				{
+					if (!(dot->next = (t_dot *)malloc(sizeof(t_dot))))
+						return (NULL);
+					dot = dot->next;
+					dot->y = y;
+					dot->x = x;
+					dot->z = ft_atoi(&map[y][fake_x]);
+					dot->next = NULL;
+					x++;
+				}
+				// if (make_list(head, dot, &x, &y, &map[y][fake_x]))
+				// 	return (NULL);
+				x++;
+				while (map[y][fake_x] >= '0' && map[y][fake_x] <= '9')
+					fake_x++;
 			}
 			else
-			{
-				if (!(dot->next = (t_dot *)malloc(sizeof(t_dot))))
-					return (NULL);
-				dot = dot->next;
-				dot->y = y;
-				dot->x = x;
-				dot->z = map[y][x];	
-			}
-			x++;
+				fake_x++;
 		}
 		y++;
 	}
 	return (head);
 }
 
-int	**char_to_int(char **c_map, int line_nb)
+int		read_map(t_info *info, char *argv)
 {
-	int **i_map;
-	int y;
-	int xc;
-	int xi;
+	int		y;
+	char	*line;
+	int		fd;
 
-	if (!(i_map = (int **)malloc(sizeof(int *) * line_nb + 1)))
-		return (NULL) ;
+	info->line_nb = 0;
+	fd = open(argv, O_RDONLY);
+	while (get_next_line(fd, &line) > 0)
+		info->line_nb++;
+	close(fd);
+	if (!(info->map = (char **)malloc(sizeof(char *) * (info->line_nb + 1))))
+		return (1);
+	fd = open(argv, O_RDONLY);
 	y = 0;
-	while (c_map[y] != '\0')
+	while (get_next_line(fd, &line) > 0)
 	{
-		if (!(i_map[y] = (int *)malloc(sizeof(int) * ft_strlen(c_map[y]) + 1)))
-			return (NULL);
-		xi = 0;
-		xc = 0;
-		while (c_map[y][xc] != '\0')
-		{
-			while (c_map[y][xc] == ' ')
-				xc++;
-			i_map[y][xi] = ft_atoi(&c_map[y][xc]);
-			xi++;
-			xc++;
-			while (c_map[y][xc] == ' ')
-				xc++;
-		}
-		i_map[y][xi] = -1;
+		info->map[y] = ft_strdup(line);
 		y++;
+		ft_strdel(&line);
 	}
-	i_map[y] = NULL;
-	return (i_map);
+	info->map[y] = NULL;
+	close(fd);
+	return (0);
+}
+
+t_info	*create_info(t_info *info)
+{
+	if (!(info = malloc(sizeof(t_info))))
+		return (NULL);
+	info->line_nb = 0;
+	info->head = NULL;
+	info->head = NULL;
+	return (info);
 }
 
 int		main(int argc, char **argv)
 {
-	int		fd;
-	char	*line;
-	int		line_nb;
-	int		line_len;
-	char	**map;
-	int		y;
-	void *param[2];
-	int **i_map;
-	int x;
-	t_dot *head;
-	t_dot *temp;
+	t_info *info;
 
 	if (argc != 2)
 	{
 		ft_putendl("Parameters not valid.");
 		return (1);
 	}
-	
-	line_nb = 0;
-	fd = open(argv[1], O_RDONLY);
-	while (get_next_line(fd, &line) > 0)
-	{
-		line_nb++;
-		line_len = ft_strlen(line);
-	}
-	close (fd);
-	if (!(map = (char **)malloc(sizeof(char *) * (line_nb + 1))))
-		return (-1);
-	fd = open(argv[1], O_RDONLY);
-	y = 0;
-	while (get_next_line(fd, &line) > 0)
-	{
-		map[y] = ft_strdup(line);
-		// printf("line: %s\n", line);
-		// printf("map[%d]: %s\n", y, map[y]);
-		y++;
-		ft_strdel(&line);
-	}
-	
-	map[y] = NULL;
-	close (fd);
-	i_map = char_to_int(map, line_nb);
-	head = save_coords(i_map);
-	// printf("before rot:\n");
-	// temp = head;
-	// while (temp)
-	// {
-	// 	printf("y: %d x: %d z: %d\n", temp->y, temp->x, temp->z);
-	// 	temp = temp->next;
-	// }
-	// y = 0;
-	// while (i_map[y] != NULL)
-	// {
-		
-	// 	x = 0;
-	// 	while (i_map[y][x] != -1)
-	// 	{
-	// 		printf("%d ", i_map[y][x]);
-	// 		x++;
-	// 	}
-	// 	printf("\n");
-	// 	y++;
-	// }
-	rotate_z(head);
-	//ft_putendl("WTF");
-	printf("\n\nafter rot:\n");
-	temp = head;
-	while (temp)
-	{
-		printf("y: %d x: %d z: %d\n", temp->y, temp->x, temp->z);
-		temp = temp->next;
-	}
-	// rotate_z(head);
-	// param[0] = mlx_init();
-	// param[1] = mlx_new_window(param[0], 1000, 1000, "mlx_42");
-	// draw_map(head, line_nb, param);
-	// mlx_loop(param[0]);
+	if (!(info = create_info(info)))
+		return (1);
+	if (read_map(info, argv[1]))
+		return (1);
+	info->head = save_coords(info->map, info->head);
+	info->param[0] = mlx_init();
+	info->param[1] = mlx_new_window(info->param[0], 1000, 1000, "mlx_42");
+	draw_map(info);
+	mlx_loop(info->param[0]);
 	return (0);
 }

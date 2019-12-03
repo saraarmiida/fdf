@@ -6,7 +6,7 @@
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 11:19:27 by spentti           #+#    #+#             */
-/*   Updated: 2019/11/28 20:01:48 by spentti          ###   ########.fr       */
+/*   Updated: 2019/12/02 20:24:06 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,27 @@ typedef struct 		s_dot
 	struct s_dot	*next;
 }					t_dot;
 
-int					draw_line(int x1, int y1, int x2, int y2, void **param);
+typedef struct 		s_info
+{
+	int				line_nb;
+	char			**map;
+	void 			*param[2];
+	t_dot 			*head;
+}					t_info;
+
+typedef struct 		s_xy
+{
+	int				x1;
+	int				y1;
+	int				x2;
+	int				y2;
+	int				dx;
+	int				dy;
+}					t_xy;
+
+
+int					draw_line(t_xy *xy, void **param);
 void				rotate_z(t_dot *list);
-int					draw_map(t_dot *dot, int lines, void **param);
+int					draw_map(t_info *info);
 	
 #endif
