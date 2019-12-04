@@ -6,11 +6,11 @@
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 19:58:22 by spentti           #+#    #+#             */
-/*   Updated: 2019/11/29 14:44:52 by spentti          ###   ########.fr       */
+/*   Updated: 2019/12/04 14:18:53 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../includes/fdf.h"
 
 void	rotate_z(t_dot *list)
 {

@@ -211,3 +211,29 @@ xy->x1 = ((dot->x - dot->y) * cos(0.523599)) * 50 + 100;
 	xy->y2 = ((-(dot->z) + (dot->x + dot->y) * sin(0.523599)) + mode_y) * 50 + 100;
 	xy->dx = xy->x2 - xy->x1;
 	xy->dy = xy->y2 - xy->y1;
+
+void	get_xy(t_dot *dot, int *x, int *y, t_info *info)
+{
+	float	times;
+	int		result;
+	int		off;
+	float	w;
+	float	h;
+
+	result = info->line_len * info->line_nb;
+	times = 0;
+	off = 400;
+	while (result < 1600)
+	{
+		times += 50;
+		result = result + times;
+	}
+	while (result > 250000)
+	{
+		times -= 50;
+		result = result - times;
+	}
+	times = ft_sqrt(result);
+	*x = (dot->x - dot->y) * cos(0.523599) * 10 + off;
+	*y = (-(dot->z) + (dot->x + dot->y)) * sin(0.523599) * 10 + off;
+}

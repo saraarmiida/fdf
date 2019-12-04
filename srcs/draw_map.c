@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw.c                                             :+:      :+:    :+:   */
+/*   draw_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/28 19:57:28 by spentti           #+#    #+#             */
-/*   Updated: 2019/12/03 19:38:38 by spentti          ###   ########.fr       */
+/*   Created: 2019/12/04 13:46:00 by spentti           #+#    #+#             */
+/*   Updated: 2019/12/04 17:40:22 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../includes/fdf.h"
 
 int		line_len(t_dot *list, int lines)
 {
@@ -58,18 +58,20 @@ t_xy	*make_xy(t_dot *dot, int mode)
 
 int		draw_map(t_info *info)
 {
-	int		len;
 	t_dot	*dot;
+	int i;
 
+	i = 0;
 	dot = info->head;
-	len = line_len(dot, info->line_nb);
+	info->width = line_len(dot, info->height);
+	dot = info->head;
 	while (dot->next)
 	{
-		if (dot->x < len - 1)
+		if (dot->x < info->width - 1)
 		{
 			draw_line(make_xy(dot, 0), info->param);
 		}
-		if (dot->y < info->line_nb - 1)
+		if (dot->y < info->height - 1)
 		{
 			draw_line(make_xy(dot, 1), info->param);
 		}

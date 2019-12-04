@@ -6,7 +6,7 @@
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 11:19:27 by spentti           #+#    #+#             */
-/*   Updated: 2019/12/02 20:24:06 by spentti          ###   ########.fr       */
+/*   Updated: 2019/12/04 16:32:21 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define FDF_H
 
 # include "mlx.h"
-# include "libft/includes/libft.h"
+# include "../libft/includes/libft.h"
 # include <unistd.h>
 # include <stdio.h>
 # include <fcntl.h>
@@ -31,7 +31,8 @@ typedef struct 		s_dot
 
 typedef struct 		s_info
 {
-	int				line_nb;
+	int				height;
+	int				width;
 	char			**map;
 	void 			*param[2];
 	t_dot 			*head;
@@ -51,5 +52,6 @@ typedef struct 		s_xy
 int					draw_line(t_xy *xy, void **param);
 void				rotate_z(t_dot *list);
 int					draw_map(t_info *info);
+t_dot				*save_coords(char **map, t_dot *head);
 	
 #endif
