@@ -6,7 +6,7 @@
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 13:44:59 by spentti           #+#    #+#             */
-/*   Updated: 2019/12/04 17:47:50 by spentti          ###   ########.fr       */
+/*   Updated: 2019/12/09 15:16:42 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,9 @@ int		make_list(t_dot *head, t_dot *dot, int *x, int *y, char *z)
 	return (0);
 }
 
-t_dot	*save_coords(char **map, t_dot *head)
+
+
+t_dot	*save_map(t_info *info)
 {
 	t_dot	*dot;
 	int		fake_x;
@@ -56,22 +58,23 @@ t_dot	*save_coords(char **map, t_dot *head)
 	int		y;
 
 	y = 0;
-	while (map[y])
+	while (info->map[y])
 	{
 		x = 0;
 		fake_x = 0;
-		while (map[y][fake_x])
+		while (info->map[y][fake_x])
 		{
-			if ((map[y][fake_x] >= '0' && map[y][fake_x] <= '9') || map[y][fake_x] == '-')
+			if ((info->map[y][fake_x] >= '0' && info->map[y][fake_x] <= '9') || info->map[y][fake_x] == '-')
 			{
-				if (head == NULL)
+				if (info->head == NULL)
 				{
-					if (!(head = (t_dot *)malloc(sizeof(t_dot))))
+					if (!(info->head = (t_dot *)malloc(sizeof(t_dot))))
 						return (NULL);
-					head->z = ft_atoi(&map[y][fake_x]);
-					head->y = y;
-					head->x = x;
-					dot = head;
+					info->head->z = ft_atoi(&info->map[y][fake_x]);
+					info->head->y = y;
+					info->head->x = x;
+					info->head->color = mlx_get_color_value(info->param[0], 0xFFFFFF);
+					dot = info->head;
 					dot->next = NULL;
 
 				}
@@ -82,19 +85,26 @@ t_dot	*save_coords(char **map, t_dot *head)
 					dot = dot->next;
 					dot->y = y;
 					dot->x = x;
-					dot->z = ft_atoi(&map[y][fake_x]);
+					dot->color = mlx_get_color_value(info->param[0], 0xFFFFFF);
+					dot->z = ft_atoi(&info->map[y][fake_x]);
 					dot->next = NULL;
 				}
-				// if (make_list(head, dot, &x, &y, &map[y][fake_x]))
+				// if (make_list(info->head, dot, &x, &y, &info->map[y][fake_x]))
 				// 	return (NULL);
 				x++;
-				while ((map[y][fake_x] >= '0' && map[y][fake_x] <= '9') || map[y][fake_x] == '-')
+				while ((info->map[y][fake_x] >= '0' && info->map[y][fake_x] <= '9') || info->map[y][fake_x] == '-')
 					fake_x++;
+				if (info->map[y][fake_x] == ',' && info->map[y][fake_x + 1] == '0' && info->map[y][fake_x + 2] == 'x')
+				{
+					dot->color = ft_atoi_base(&info->map[y][fake_x + 3], 16);
+					while (info->map[y][fake_x] != ' ')
+						fake_x++;
+				}
 			}
 			else
 				fake_x++;
 		}
 		y++;
 	}
-	return (head);
+	return (info->head);
 }

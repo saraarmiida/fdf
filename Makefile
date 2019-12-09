@@ -6,7 +6,7 @@
 #    By: spentti <spentti@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/26 17:17:12 by spentti           #+#    #+#              #
-#    Updated: 2019/12/04 14:18:10 by spentti          ###   ########.fr        #
+#    Updated: 2019/12/05 10:34:19 by spentti          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ LIB = -L minilibx/ -lmlx
 SRC = srcs/*.c
 
 all:
-	gcc libft/libft.a $(SRC) $(LIB) $(FRAME)
+	gcc libft/libft.a $(SRC) $(LIB) $(FRAME) -o $(NAME)
 
 clean:
 

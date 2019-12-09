@@ -6,7 +6,7 @@
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 13:46:00 by spentti           #+#    #+#             */
-/*   Updated: 2019/12/04 17:40:22 by spentti          ###   ########.fr       */
+/*   Updated: 2019/12/09 16:34:27 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,23 @@ int		line_len(t_dot *list, int lines)
 	return (len / lines);
 }
 
-void	get_xy(t_dot *dot, int *x, int *y)
+void	get_xy(t_dot *dot, int *x, int *y, t_info *info)
 {
-	*x = (dot->x - dot->y) * cos(0.523599) * 10 + 400;
-	*y = (-(dot->z) + (dot->x + dot->y)) * sin(0.523599) * 10 + 300;
+	*x = (dot->x - dot->y) * cos(0.523599) * info->size + info->x_off;
+	*y = (-(dot->z) + (dot->x + dot->y)) * sin(0.523599) * info->size + info->y_off;
 }
 
-t_xy	*make_xy(t_dot *dot, int mode)
+t_xy	*make_xy(t_dot *dot, int mode, t_info *info)
 {
 	t_xy	*xy;
 	int		x;
 
 	if (!(xy = (t_xy *)malloc(sizeof(t_xy))))
 		return (NULL);
-	get_xy(dot, &xy->x1, &xy->y1);
+	get_xy(dot, &xy->x1, &xy->y1, info);
 	if (mode == 0)
 	{
-		get_xy(dot->next, &xy->x2, &xy->y2);
+		get_xy(dot->next, &xy->x2, &xy->y2, info);
 	}
 	else
 	{
@@ -49,7 +49,7 @@ t_xy	*make_xy(t_dot *dot, int mode)
 		dot = dot->next;
 		while (dot->x != x)
 			dot = dot->next;
-		get_xy(dot, &xy->x2, &xy->y2);
+		get_xy(dot, &xy->x2, &xy->y2, info);
 	}
 	xy->dx = xy->x2 - xy->x1;
 	xy->dy = xy->y2 - xy->y1;
@@ -59,7 +59,7 @@ t_xy	*make_xy(t_dot *dot, int mode)
 int		draw_map(t_info *info)
 {
 	t_dot	*dot;
-	int i;
+	int		i;
 
 	i = 0;
 	dot = info->head;
@@ -69,11 +69,11 @@ int		draw_map(t_info *info)
 	{
 		if (dot->x < info->width - 1)
 		{
-			draw_line(make_xy(dot, 0), info->param);
+			draw_line(make_xy(dot, 0, info), info, dot->color);
 		}
 		if (dot->y < info->height - 1)
 		{
-			draw_line(make_xy(dot, 1), info->param);
+			draw_line(make_xy(dot, 1, info), info, dot->color);
 		}
 		dot = dot->next;
 	}
