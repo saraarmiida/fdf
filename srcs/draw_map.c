@@ -6,7 +6,7 @@
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 13:46:00 by spentti           #+#    #+#             */
-/*   Updated: 2019/12/09 16:34:27 by spentti          ###   ########.fr       */
+/*   Updated: 2019/12/18 17:26:36 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ int		line_len(t_dot *list, int lines)
 
 void	get_xy(t_dot *dot, int *x, int *y, t_info *info)
 {
-	*x = (dot->x - dot->y) * cos(0.523599) * info->size + info->x_off;
-	*y = (-(dot->z) + (dot->x + dot->y)) * sin(0.523599) * info->size + info->y_off;
+	*x = (dot->x - dot->y) * cos(0.523599) * info->size + 300;
+	*y = (-(dot->z) + (dot->x + dot->y))\
+	* sin(0.523599) * info->size + 300;
 }
 
 t_xy	*make_xy(t_dot *dot, int mode, t_info *info)

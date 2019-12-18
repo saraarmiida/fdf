@@ -6,7 +6,7 @@
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 13:46:54 by spentti           #+#    #+#             */
-/*   Updated: 2019/12/09 16:28:30 by spentti          ###   ########.fr       */
+/*   Updated: 2019/12/10 12:03:19 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,22 @@ void	put_pixel(t_info *info, int x, int y, int color)
 	}
 }
 
-void	no_slope(t_xy *xy, int sign, t_info *info, int color)
+void	no_slope(t_xy *xy, t_info *info, int color)
 {
 	put_pixel(info, xy->x1, xy->y1, color);
 	if (xy->y1 > xy->y2)
 	{
-		sign = -1;
+		xy->sign = -1;
 		xy->dy = -xy->dy;
 	}
 	while (xy->y1 != xy->y2)
 	{
-		xy->y1 = xy->y1 + sign;
+		xy->y1 = xy->y1 + xy->sign;
 		put_pixel(info, xy->x1, xy->y1, color);
 	}
 }
 
-void	low_slope(t_xy *xy, int sign, int xsign, t_info *info, int color)
+void	low_slope(t_xy *xy, t_info *info, int color)
 {
 	int p;
 
@@ -49,21 +49,21 @@ void	low_slope(t_xy *xy, int sign, int xsign, t_info *info, int color)
 	{
 		if (p < 0)
 		{
-			xy->x1 = xy->x1 + xsign;
+			xy->x1 = xy->x1 + xy->xsign;
 			put_pixel(info, xy->x1, xy->y1, color);
 			p = p + (2 * xy->dy);
 		}
 		else
 		{
-			xy->x1 = xy->x1 + xsign;
-			xy->y1 = xy->y1 + sign;
+			xy->x1 = xy->x1 + xy->xsign;
+			xy->y1 = xy->y1 + xy->sign;
 			put_pixel(info, xy->x1, xy->y1, color);
 			p = p + (2 * xy->dy) - (2 * xy->dx);
 		}
 	}
 }
 
-void	high_slope(t_xy *xy, int sign, int xsign, t_info *info, int color)
+void	high_slope(t_xy *xy, t_info *info, int color)
 {
 	int p;
 
@@ -72,14 +72,14 @@ void	high_slope(t_xy *xy, int sign, int xsign, t_info *info, int color)
 	{
 		if (p < 0)
 		{
-			xy->y1 = xy->y1 + sign;
+			xy->y1 = xy->y1 + xy->sign;
 			put_pixel(info, xy->x1, xy->y1, color);
 			p = p + (2 * xy->dx);
 		}
 		else
 		{
-			xy->x1 = xy->x1 + xsign;
-			xy->y1 = xy->y1 + sign;
+			xy->x1 = xy->x1 + xy->xsign;
+			xy->y1 = xy->y1 + xy->sign;
 			put_pixel(info, xy->x1, xy->y1, color);
 			p = p + (2 * xy->dx) - (2 * xy->dy);
 		}
@@ -103,25 +103,22 @@ void	signs(t_xy *xy, int *m, int *sign, int *xsign)
 		*m = -*m;
 }
 
-
 int		draw_line(t_xy *xy, t_info *info, int color)
 {
 	int m;
-	int sign;
-	int xsign;
 
-	sign = 1;
-	xsign = 1;
+	xy->sign = 1;
+	xy->xsign = 1;
 	if (xy->x1 == xy->x2)
-		no_slope(xy, sign, info, color);
+		no_slope(xy, info, color);
 	else
 	{
-		signs(xy, &m, &sign, &xsign);
+		signs(xy, &m, &xy->sign, &xy->xsign);
 		put_pixel(info, xy->x1, xy->y1, color);
 		if (m < 1 && m >= 0)
-			low_slope(xy, sign, xsign, info, color);
+			low_slope(xy, info, color);
 		if (m >= 1)
-			high_slope(xy, sign, xsign, info, color);
+			high_slope(xy, info, color);
 	}
 	return (0);
 }
