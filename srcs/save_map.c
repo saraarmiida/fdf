@@ -6,7 +6,7 @@
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 13:44:59 by spentti           #+#    #+#             */
-/*   Updated: 2019/12/18 19:25:25 by spentti          ###   ########.fr       */
+/*   Updated: 2019/12/19 16:39:29 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,21 @@ void		save_xy(t_dot *dot, t_info *info)
 	// dot->color = mlx_get_color_value(info->param[0], 0xFFFFFF);
 	// dot->z = ft_atoi(&info->map[info->y][info->fake_x]);
 	// dot->next = NULL;
+}
+
+void	get_size(t_info *info)
+{
+	info->bigger = info->x;
+	if (info->height > info->x)
+		info->bigger = info->height;
+	if (info->bigger < 500)
+	{
+		printf("info->bigger: %f\n", info->bigger);
+		info->size = 500 / info->bigger;
+	}
+	else
+		info->size = info->bigger / 500;
+	printf("height: %d\nx: %d\nsize: %f\ninfo->bigger / 600: %f\n", info->height, info->x, info->size, info->bigger / 600);
 }
 
 t_dot	*save_map(t_info *info)
@@ -55,6 +70,7 @@ t_dot	*save_map(t_info *info)
 		}
 		info->y++;
 	}
+	get_size(info);
 	// while (info->map[info->y] != NULL)
 	// 	ft_strdel(&info->map[info->y++]);
 	// free(info->map);

@@ -6,7 +6,7 @@
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 13:42:04 by spentti           #+#    #+#             */
-/*   Updated: 2019/12/18 19:26:40 by spentti          ###   ########.fr       */
+/*   Updated: 2019/12/19 16:47:02 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int		read_map(t_info *info, char *argv)
 		ft_strdel(&line);
 	}
 	info->map[y] = NULL;
+
 	close(fd);
 	return (0);
 }
@@ -48,7 +49,7 @@ t_info	*create_info(t_info *info)
 	info->x_off = 300;
 	info->y_off = 100;
 	info->bits_per_pixel = 24;
-	info->size = 20;
+	info->endian = 1;
 	return (info);
 }
 
@@ -72,7 +73,6 @@ void	clear(t_info *info)
 int		main(int argc, char **argv)
 {
 	t_info	*info;
-	int		endian;
 
 	if (argc != 2)
 	{
@@ -87,9 +87,8 @@ int		main(int argc, char **argv)
 	info->param[0] = mlx_init();
 	info->param[1] = mlx_new_window(info->param[0], WIDTH, HEIGHT, "mlx_42");
 	info->param[2] = mlx_new_image(info->param[0], WIDTH, HEIGHT);
-	endian = 1;
 	info->size_line = WIDTH * 24;
-	info->data_addr = mlx_get_data_addr(info->param[2], &info->bits_per_pixel, &info->size_line, &endian);
+	info->data_addr = mlx_get_data_addr(info->param[2], &info->bits_per_pixel, &info->size_line, &info->endian);
 	draw_map(info);
 	mlx_key_hook(info->param[1], key_hook, info);
 	mlx_put_image_to_window(info->param[0], info->param[1], info->param[2], info->x_off, info->y_off);

@@ -6,7 +6,7 @@
 /*   By: spentti <spentti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 11:19:27 by spentti           #+#    #+#             */
-/*   Updated: 2019/12/18 19:52:01 by spentti          ###   ########.fr       */
+/*   Updated: 2019/12/19 16:46:21 by spentti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef struct 		s_info
 	int				width;
 	int				x_off;
 	int				y_off;
-	int				size;
+	float			size;
 	char			**map;
 	void 			*param[3];
 	char			*data_addr;
@@ -81,6 +81,8 @@ typedef struct 		s_info
 	int				y;
 	int				bits_per_pixel;
 	int				size_line;
+	float			bigger;
+	int				endian;
 	t_camera		*camera;
 	t_dot			*dot;
 	t_dot 			*head;
