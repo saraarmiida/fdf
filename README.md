@@ -3,4 +3,4 @@ This project is about creating a simplified 3D graphic representation of a relie
 
 ## Demo
 
-![](Feb-08-2021\ 16-34-59.gif)
+![](Feb-08-2021 16-34-59.gif)
